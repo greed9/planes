@@ -32,7 +32,8 @@ BEGIN {
 /^MSG,1/ {
 	if( $11 != "" ) {
 	    if( ! ( $5 in aircraft ) ) {
-	     printf( "Just acquired aircraft id=%s\n", $11 ) > "/dev/stderr" ;
+	     #printf( "Just acquired aircraft id=%s\n", $11 ) > "/dev/stderr" ;
+	     printf ( "+%s: %s\n", strftime( "%H%M%S", makeEpochTime( $7, $8 ) ), $11 ) > "/dev/stderr"  ;
 	     nTimesSeen[$5] = 0 ;
 	    }
 	    aircraft[$5] = $11 ; # key is aircraft hex id, value is callsign
@@ -46,7 +47,8 @@ BEGIN {
     for ( key in aircraft  ) {
 	    intervalSecs = lastSeen - contacts[key] ;
 	    if ( intervalSecs > inactiveSecs ) {
-		    printf( "Removing aircraft id=%s, not seen for %d seconds, seen %d times\n", aircraft[key], intervalSecs, nTimesSeen[key] ) > "/dev/stderr" ;
+		    #printf( "Removing aircraft id=%s, not seen for %d seconds, seen %d times\n", aircraft[key], intervalSecs, nTimesSeen[key] ) > "/dev/stderr" ;
+		    printf ( "-%s: %s\n", strftime( "%H%M%S", makeEpochTime( $7, $8 ) ), aircraft[key] ) > "/dev/stderr" ;
 		    delete contacts[key] ;
 		    delete aircraft[key] ;
 		    delete latLongAlt[key] ;
