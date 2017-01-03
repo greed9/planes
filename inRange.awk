@@ -21,6 +21,8 @@ BEGIN {
 
 {
     flt = $1 ;
+    split( flt, arr, "=" ) ;
+    flt = arr[2] ;
     
     dist = $7 ;
     split ( dist,  arr, "=" ) ;
@@ -33,6 +35,10 @@ BEGIN {
     elv = $9 ;
     split ( elv, arr, "=" ) ;
     elv = arr[2] ;
+    
+    bearing = $5 ;
+    split( bearing, arr, "=" ) ;
+    bearing = arr[2] ;
     
     #printf ( "dist=%s, az=%s, elv=%s\n", dist, az, elv ) ;
     
@@ -49,7 +55,8 @@ BEGIN {
 
 		# print every 10 secs
 		if( ( interval % 10 ) == 0 ) {
-			print $0 ;
+			#print $0 ;
+			printf( "*Flight: %s, Az: %s, El: %s, Heading: %s, Dist: %s\n", flt, az, elv, bearing, dist ) ;
 		}
 
 		# track the max elevation for this pass
@@ -61,7 +68,8 @@ BEGIN {
 		visibleTm[flt] = tmNow ;
 		maxElev[flt] = elv ;
 		#flightInfo[flt] = lookupFlight( cleanvalues( $1 ) ) ;
-		print $0 ;
+		#print $0 ;
+		printf( "+Flight: %s, Az: %s, El: %s, Heading: %s, Dist: %s\n", flt, az, elv, bearing, dist ) ;
 	}
 
         	
@@ -71,7 +79,8 @@ BEGIN {
 	# Just flew out of view
 	if ( flt in visibleTm ) {
 		tmEnd = makeEpochTime( cleanValues( $3 ), cleanValues( $2 ) ) ;
-		printf ( "Flight=%s,visible(secs)=%s,maxElv=%s\n", flt, visibleTm[flt] - tmEnd, maxElev[flt] ) ;
+		#printf ( "Flight=%s,visible(secs)=%s,maxElv=%s\n", flt, tmEnd - visibleTm[flt], maxElev[flt] ) ;
+		printf ( "-Flight: %s, Secs: %s, El: %s\n", flt, tmEnd - visibleTm[flt], maxElev[flt] ) ;
 		delete visibleTm[flt] ;
 		delete maxElev[flt] ;
 		#delete flightInfo[flt] ;
