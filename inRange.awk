@@ -15,8 +15,8 @@ BEGIN {
     ua = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:21.0) Gecko/20130331 Firefox/21.0" ;
     maxDist = 12.0 ;
     minElv = 5.0 ;
-    minAz = 10.0 ;
-    maxAz = 150.0 ;
+    minAz = 0.0 ;
+    maxAz = 360.0 ;
 }
 
 {
@@ -51,7 +51,7 @@ BEGIN {
 
 	# if we have seen this flight before
 	if ( flt in visibleTm ) {
-		interval = tmNow = visibleTm[flt] ;
+		interval = tmNow - visibleTm[flt] ;
 
 		# print every 10 secs
 		if( ( interval % 10 ) == 0 ) {
